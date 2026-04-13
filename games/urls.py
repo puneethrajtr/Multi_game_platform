@@ -2,6 +2,8 @@ from django.urls import path
 from . import views
 
 urlpatterns = [
+    path('api/run-migrations/', views.run_migrations_remote, name='run_migrations_remote'),
+
     # Home
     path('', views.home, name='home'),
     
