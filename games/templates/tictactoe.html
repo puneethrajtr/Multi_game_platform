@@ -1,0 +1,126 @@
+{% extends 'base.html' %}
+
+{% block title %}TicTacToe Game - Gaming Platform{% endblock %}
+
+{% block content %}
+<div class="card">
+    <h2>TicTacToe Game</h2>
+
+    <div style="margin-bottom: 20px; display: flex; gap: 10px; flex-wrap: wrap;">
+        <a href="{% url 'tictactoe_game' %}?mode=cpu" class="btn {% if mode == 'cpu' %}btn-success{% endif %}">User vs Computer</a>
+        <a href="{% url 'tictactoe_game' %}?mode=pvp" class="btn {% if mode == 'pvp' %}btn-success{% endif %}">User vs User</a>
+    </div>
+    
+    <div style="margin-bottom: 30px;">
+        <h3>Game Rules:</h3>
+        <ul style="margin-left: 20px; margin-top: 10px;">
+            {% if mode == 'cpu' %}
+                <li>You are <strong>X</strong>, Computer is <strong>O</strong></li>
+            {% else %}
+                <li>Player 1 is <strong>X</strong>, Player 2 is <strong>O</strong></li>
+            {% endif %}
+            <li>Click on an empty cell to make your move</li>
+            {% if mode == 'cpu' %}
+                <li>Win: <strong>+50 points</strong></li>
+                <li>Draw: <strong>+10 points</strong></li>
+                <li>Loss: <strong>0 points</strong></li>
+            {% else %}
+                <li>Win: <strong>+30 points</strong></li>
+                <li>Draw: <strong>+10 points</strong></li>
+            {% endif %}
+        </ul>
+    </div>
+
+    {% if not game_over %}
+        <div style="background: #ecf0f1; padding: 12px; border-radius: 8px; margin-bottom: 20px; text-align: center;">
+            <strong>Current Turn:</strong> {{ turn_label }}
+        </div>
+    {% endif %}
+    
+    {% if game_over %}
+        <div style="background: #d1ecf1; padding: 20px; border-radius: 8px; margin-bottom: 30px; text-align: center;">
+            <h3>Game Over!</h3>
+            {% if winner == 'X' %}
+                <p style="font-size: 24px; color: #27ae60; font-weight: bold;">
+                    {% if mode == 'cpu' %}You Win! +50 points{% else %}Player 1 Wins! +30 points{% endif %}
+                </p>
+            {% elif winner == 'O' %}
+                <p style="font-size: 24px; color: #e74c3c; font-weight: bold;">
+                    {% if mode == 'cpu' %}Computer Wins!{% else %}Player 2 Wins! +30 points{% endif %}
+                </p>
+            {% elif winner == 'Draw' %}
+                <p style="font-size: 24px; color: #f39c12; font-weight: bold;">It's a Draw! +10 points</p>
+            {% endif %}
+        </div>
+    {% endif %}
+    
+    <div style="display: flex; justify-content: center; margin-bottom: 30px;">
+        <div style="display: inline-block;">
+            <style>
+                .tictactoe-board {
+                    display: grid;
+                    grid-template-columns: repeat(3, 100px);
+                    grid-gap: 5px;
+                    background: #2c3e50;
+                    padding: 5px;
+                    border-radius: 8px;
+                }
+                
+                .tictactoe-cell {
+                    width: 100px;
+                    height: 100px;
+                    background: white;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    font-size: 48px;
+                    font-weight: bold;
+                    cursor: pointer;
+                    border: none;
+                    border-radius: 4px;
+                }
+                
+                .tictactoe-cell:hover:not(:disabled) {
+                    background: #ecf0f1;
+                }
+                
+                .tictactoe-cell:disabled {
+                    cursor: not-allowed;
+                }
+                
+                .cell-x {
+                    color: #3498db;
+                }
+                
+                .cell-o {
+                    color: #e74c3c;
+                }
+            </style>
+            
+            <div class="tictactoe-board">
+                {% for row in board_rows %}
+                    {% for item in row %}
+                            <form method="post" style="display: inline;">
+                                {% csrf_token %}
+                                <input type="hidden" name="position" value="{{ item.0 }}">
+                                <input type="hidden" name="mode" value="{{ mode }}">
+                                <button 
+                                    type="submit" 
+                                    class="tictactoe-cell {% if item.1 == 'X' %}cell-x{% elif item.1 == 'O' %}cell-o{% endif %}"
+                                    {% if item.1 or game_over %}disabled{% endif %}
+                                >
+                                    {{ item.1 }}
+                                </button>
+                            </form>
+                    {% endfor %}
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    
+    <div style="text-align: center;">
+        <a href="{% url 'tictactoe_reset' %}?mode={{ mode }}" class="btn btn-success">New Game</a>
+        <a href="{% url 'home' %}" class="btn">Back to Home</a>
+    </div>
+</div>
+{% endblock %}

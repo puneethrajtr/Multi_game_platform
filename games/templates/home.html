@@ -1,0 +1,65 @@
+{% extends 'base.html' %}
+
+{% block title %}Home - Gaming Platform{% endblock %}
+
+{% block content %}
+<div class="card">
+    <h2>Welcome to Gaming Platform!</h2>
+    
+    {% if user.is_authenticated %}
+        <p>Hello, <strong>{{ user.username }}</strong>! Ready to play some games?</p>
+        
+        <div style="margin-top: 30px;">
+            <h3>Your Stats</h3>
+            <p><strong>Total Score:</strong> {{ user.profile.total_score }}</p>
+            <p><strong>Games Played:</strong> {{ user.profile.games_played }}</p>
+        </div>
+        
+        <div style="margin-top: 30px;">
+            <h3>Available Games</h3>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 18px; margin-top: 15px;">
+                <div style="padding: 20px; background: linear-gradient(150deg, #eff6ff 0%, #e0f2fe 100%); border: 1px solid #bfdbfe; border-radius: 12px;">
+                    <h4>🔢 FizzBuzz</h4>
+                    <p>Play FizzBuzz in User vs Computer or User vs User mode.</p>
+                    <p><strong>Scoring:</strong> +10 points per correct answer</p>
+                    <a href="{% url 'fizzbuzz_game' %}" class="btn" style="margin-top: 10px;">Play FizzBuzz</a>
+                </div>
+                
+                <div style="padding: 20px; background: linear-gradient(150deg, #fefce8 0%, #ffedd5 100%); border: 1px solid #fed7aa; border-radius: 12px;">
+                    <h4>❌ TicTacToe</h4>
+                    <p>Classic TicTacToe with User vs Computer and User vs User.</p>
+                    <p><strong>Scoring:</strong> Win: +50 | Draw: +10</p>
+                    <a href="{% url 'tictactoe_game' %}" class="btn" style="margin-top: 10px;">Play TicTacToe</a>
+                </div>
+
+                <div style="padding: 20px; background: linear-gradient(150deg, #ecfdf5 0%, #dcfce7 100%); border: 1px solid #86efac; border-radius: 12px;">
+                    <h4>♟ Chess</h4>
+                    <p>Play full Chess with legal moves in User vs User or vs Computer.</p>
+                    <p><strong>Scoring:</strong> Win: +100 | Draw: +30</p>
+                    <a href="{% url 'chess_game' %}" class="btn" style="margin-top: 10px;">Play Chess</a>
+                </div>
+            </div>
+        </div>
+        
+        <div style="margin-top: 30px;">
+            <a href="{% url 'leaderboard' %}" class="btn btn-success">View Leaderboard</a>
+        </div>
+    {% else %}
+        <p>Welcome to our gaming platform! Please log in or register to start playing.</p>
+        
+        <div style="margin-top: 30px;">
+            <h3>Available Games</h3>
+            <ul style="margin-left: 20px; margin-top: 10px;">
+                <li><strong>FizzBuzz:</strong> Test your math and pattern recognition skills</li>
+                <li><strong>TicTacToe:</strong> Play against computer or another user</li>
+                <li><strong>Chess:</strong> Enjoy legal Chess matches with two game modes</li>
+            </ul>
+        </div>
+        
+        <div style="margin-top: 30px;">
+            <a href="{% url 'login' %}" class="btn">Login</a>
+            <a href="{% url 'register' %}" class="btn btn-success">Register</a>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

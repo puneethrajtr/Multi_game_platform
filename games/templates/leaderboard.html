@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+
+{% block title %}Leaderboard - Gaming Platform{% endblock %}
+
+{% block content %}
+<div class="card">
+    <h2>Leaderboard</h2>
+    <p>Top players ranked by total score</p>
+    
+    {% if players %}
+        <table>
+            <thead>
+                <tr>
+                    <th>Rank</th>
+                    <th>Username</th>
+                    <th>Total Score</th>
+                    <th>Games Played</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for player in players %}
+                    <tr {% if user.is_authenticated and player.user == user %}style="background-color: #d4edda;"{% endif %}>
+                        <td>{{ forloop.counter }}</td>
+                        <td>
+                            {{ player.user.username }}
+                            {% if user.is_authenticated and player.user == user %}
+                                <strong>(You)</strong>
+                            {% endif %}
+                        </td>
+                        <td><strong>{{ player.total_score }}</strong></td>
+                        <td>{{ player.games_played }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p style="text-align: center; margin-top: 30px; color: #7f8c8d;">
+            No players yet. Be the first to play!
+        </p>
+    {% endif %}
+    
+    <div style="margin-top: 30px;">
+        <a href="{% url 'home' %}" class="btn">Back to Home</a>
+    </div>
+</div>
+{% endblock %}

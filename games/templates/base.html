@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Gaming Platform{% endblock %}</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --nav-bg: #0f172a;
+            --nav-accent: #1e293b;
+            --page-bg-a: #f4f7fb;
+            --page-bg-b: #eef7f0;
+            --primary: #2563eb;
+            --primary-hover: #1d4ed8;
+            --danger: #dc2626;
+            --danger-hover: #b91c1c;
+            --success: #16a34a;
+            --success-hover: #15803d;
+        }
+        
+        body {
+            font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(160deg, var(--page-bg-a) 0%, var(--page-bg-b) 100%);
+            color: #333;
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        /* Navigation */
+        nav {
+            background: linear-gradient(110deg, var(--nav-bg) 0%, var(--nav-accent) 100%);
+            color: white;
+            padding: 15px 0;
+            margin-bottom: 30px;
+            box-shadow: 0 8px 20px rgba(2, 6, 23, 0.2);
+        }
+        
+        nav .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+        }
+        
+        nav h1 {
+            font-size: 24px;
+            letter-spacing: 0.4px;
+        }
+        
+        nav ul {
+            list-style: none;
+            display: flex;
+            gap: 20px;
+        }
+        
+        nav a {
+            color: white;
+            text-decoration: none;
+            padding: 8px 15px;
+            border-radius: 999px;
+            transition: background-color 0.2s ease;
+        }
+        
+        nav a:hover {
+            background-color: rgba(255, 255, 255, 0.14);
+        }
+        
+        /* Messages */
+        .messages {
+            list-style: none;
+            margin-bottom: 20px;
+        }
+        
+        .message {
+            padding: 12px 20px;
+            margin-bottom: 10px;
+            border-radius: 4px;
+            border-left: 4px solid;
+        }
+        
+        .message.success {
+            background-color: #d4edda;
+            border-color: #28a745;
+            color: #155724;
+        }
+        
+        .message.error {
+            background-color: #f8d7da;
+            border-color: #dc3545;
+            color: #721c24;
+        }
+        
+        .message.info {
+            background-color: #d1ecf1;
+            border-color: #17a2b8;
+            color: #0c5460;
+        }
+        
+        /* Cards */
+        .card {
+            background: white;
+            padding: 30px;
+            border-radius: 14px;
+            border: 1px solid #e4eaf2;
+            box-shadow: 0 8px 30px rgba(15, 23, 42, 0.08);
+            margin-bottom: 20px;
+        }
+        
+        .card h2 {
+            margin-bottom: 20px;
+            color: #2c3e50;
+        }
+        
+        /* Forms */
+        .form-group {
+            margin-bottom: 15px;
+        }
+        
+        .form-input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+        
+        .form-input:focus {
+            outline: none;
+            border-color: #3498db;
+        }
+        
+        .btn {
+            padding: 10px 20px;
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            text-decoration: none;
+            display: inline-block;
+        }
+        
+        .btn:hover {
+            background-color: var(--primary-hover);
+        }
+        
+        .btn-danger {
+            background-color: var(--danger);
+        }
+        
+        .btn-danger:hover {
+            background-color: var(--danger-hover);
+        }
+        
+        .btn-success {
+            background-color: var(--success);
+        }
+        
+        .btn-success:hover {
+            background-color: var(--success-hover);
+        }
+        
+        /* Tables */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        th {
+            background-color: #2c3e50;
+            color: white;
+            font-weight: bold;
+        }
+        
+        tr:hover {
+            background-color: #f5f5f5;
+        }
+        
+        /* Game specific */
+        .game-input {
+            width: 100%;
+            max-width: 300px;
+            padding: 12px;
+            border: 2px solid #3498db;
+            border-radius: 4px;
+            font-size: 18px;
+            text-align: center;
+        }
+        
+        .score {
+            font-size: 24px;
+            color: #27ae60;
+            font-weight: bold;
+        }
+        
+        .errorlist {
+            color: #e74c3c;
+            list-style: none;
+            margin-top: 5px;
+        }
+
+        @media (max-width: 900px) {
+            nav .container {
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            nav ul {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            .container {
+                padding: 14px;
+            }
+
+            .card {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="container">
+            <h1>🎮 Gaming Platform</h1>
+            <ul>
+                <li><a href="{% url 'home' %}">🏠 Home</a></li>
+                {% if user.is_authenticated %}
+                    <li><a href="{% url 'fizzbuzz_game' %}">🔢 FizzBuzz</a></li>
+                    <li><a href="{% url 'tictactoe_game' %}">❌ TicTacToe</a></li>
+                    <li><a href="{% url 'chess_game' %}">♟ Chess</a></li>
+                    <li><a href="{% url 'leaderboard' %}">🏆 Leaderboard</a></li>
+                    <li><a href="{% url 'logout' %}">🚪 Logout ({{ user.username }})</a></li>
+                {% else %}
+                    <li><a href="{% url 'leaderboard' %}">🏆 Leaderboard</a></li>
+                    <li><a href="{% url 'login' %}">🔐 Login</a></li>
+                    <li><a href="{% url 'register' %}">✨ Register</a></li>
+                {% endif %}
+            </ul>
+        </div>
+    </nav>
+
+    <div class="container">
+        {% if messages %}
+            <ul class="messages">
+                {% for message in messages %}
+                    <li class="message {{ message.tags }}">{{ message }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+
+        {% block content %}
+        {% endblock %}
+    </div>
+</body>
+</html>
