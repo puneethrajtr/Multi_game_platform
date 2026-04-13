@@ -1,3 +1,8 @@
+import io
+import os
+
+from django.core.management import call_command
+from django.http import JsonResponse
 from django.shortcuts import render, redirect
 from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.decorators import login_required
@@ -7,6 +12,27 @@ import chess
 from .forms import RegisterForm, LoginForm, FizzBuzzForm, TicTacToeForm, ChessMoveForm
 from .models import PlayerProfile, GameScore
 from . import services
+
+
+def run_migrations_remote(request):
+    """
+    Temporary endpoint to run migrations from the deployed environment.
+
+    Safety controls:
+    - Set ENABLE_REMOTE_MIGRATE=true in env vars
+    - Provide matching token as query param: ?token=<MIGRATE_TOKEN>
+    """
+    if os.getenv('ENABLE_REMOTE_MIGRATE', '').lower() != 'true':
+        return JsonResponse({'ok': False, 'error': 'Endpoint disabled'}, status=403)
+
+    expected_token = os.getenv('MIGRATE_TOKEN', '')
+    provided_token = request.GET.get('token', '')
+    if not expected_token or provided_token != expected_token:
+        return JsonResponse({'ok': False, 'error': 'Unauthorized'}, status=403)
+
+    output = io.StringIO()
+    call_command('migrate', interactive=False, stdout=output, verbosity=1)
+    return JsonResponse({'ok': True, 'message': output.getvalue()})
 
 
 def home(request):
